@@ -19,4 +19,20 @@ public class Operacion {
     public String tipo;
     @Column(nullable = false)
     public Date fecha;
+
+    public void setContador(Contador contador) {
+        this.contador=contador.id;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario=usuario.id;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo=tipo;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha=fecha;
+    }
 }
