@@ -10,4 +10,12 @@ public class Contador {
     @Column(nullable = false, unique = true) public String nombre;
 
     @Column(nullable = false) public Long valor;
+
+    public Long getValor() {
+        return this.valor;
+    }
+
+    public void setValor(long valor) {
+        this.valor = valor;
+    }
 }

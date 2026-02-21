@@ -24,7 +24,12 @@ public class ControladorContadores {
     }
 
     @PutMapping("/api/contadores/{nombre}/incremento/{incremento}")
-    public Contador incrementa(@PathVariable String nombre, @PathVariable Long incremento) { return null; }
+    public Contador incrementa(@PathVariable String nombre, @PathVariable Long incremento) {
+        Contador contador = repoContador.findByNombre(nombre);
+        contador.setValor(contador.getValor() + incremento);
+        repoContador.save(contador);
+        return contador;
+    }
 
     @DeleteMapping("/api/contadores/{nombre}")
     public void borra(@PathVariable String nombre) { }
