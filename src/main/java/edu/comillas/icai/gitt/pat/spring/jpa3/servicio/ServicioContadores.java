@@ -2,6 +2,7 @@ package edu.comillas.icai.gitt.pat.spring.jpa3.servicio;
 
 import edu.comillas.icai.gitt.pat.spring.jpa3.entity.Contador;
 import edu.comillas.icai.gitt.pat.spring.jpa3.entity.Operacion;
+import edu.comillas.icai.gitt.pat.spring.jpa3.entity.TipoOperacion;
 import edu.comillas.icai.gitt.pat.spring.jpa3.entity.Usuario;
 import edu.comillas.icai.gitt.pat.spring.jpa3.repositorio.RepoContador;
 import edu.comillas.icai.gitt.pat.spring.jpa3.repositorio.RepoOperacion;
@@ -25,7 +26,7 @@ public class ServicioContadores {
     RepoContador repoContador;
     @Autowired
     RepoOperacion repoOperacion;
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     public Usuario autentica(String credenciales) {
         logger.info("ServicioContadores: Intentando crear el usuario: "+credenciales);
         Usuario usuario = repoUsuario.findByCredenciales(credenciales);
@@ -40,6 +41,7 @@ public class ServicioContadores {
     @Transactional
     public Contador crea(Contador contadorNuevo, Usuario usuario) {
         if (repoContador.findByNombre(contadorNuevo.nombre)!=null) {
+
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Contador no encontrado");
         }
         // Guardar el contador nuevo
@@ -49,7 +51,7 @@ public class ServicioContadores {
         Operacion operacion = new Operacion();
         operacion.setContador(contadorGuardado);
         operacion.setUsuario(usuario);
-        operacion.setTipo("CREACION");
+        operacion.setTipo(TipoOperacion.CREACION);
         operacion.setFecha(new Date());
         repoOperacion.save(operacion);
 
@@ -70,7 +72,7 @@ public class ServicioContadores {
         Operacion operacion = new Operacion();
         operacion.setContador(contador);
         operacion.setUsuario(usuario);
-        operacion.setTipo("LECTURA");
+        operacion.setTipo(TipoOperacion.LECTURA);
         operacion.setFecha(new Date());
         repoOperacion.save(operacion);
 
@@ -79,7 +81,7 @@ public class ServicioContadores {
 
 
     public List<Operacion> leeOperaciones(String nombre) {
-        List<Operacion> operaciones=null;
+        List<Operacion> operaciones;
         // Buscar el contador por nombre
         Contador contador = repoContador.findByNombre(nombre);
 
@@ -104,7 +106,7 @@ public class ServicioContadores {
         Operacion operacion = new Operacion();
         operacion.setContador(contador);
         operacion.setUsuario(usuario);
-        operacion.setTipo("INCREMENTO");
+        operacion.setTipo(TipoOperacion.INCREMENTO);
         operacion.setFecha(new Date());
         repoOperacion.save(operacion);
 
@@ -120,7 +122,7 @@ public class ServicioContadores {
             Operacion operacion = new Operacion();
             operacion.setContador(contador);
             operacion.setUsuario(usuario);
-            operacion.setTipo("BORRADO");
+            operacion.setTipo(TipoOperacion.BORRADO);
             operacion.setFecha(new Date());
             repoOperacion.save(operacion);
         } catch (Exception e) {
